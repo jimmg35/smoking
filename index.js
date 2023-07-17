@@ -1,39 +1,55 @@
 
-// let myBtn = document.getElementById("my_btn")
-// let myBtnMinus = document.getElementById("my_btn_minus")
-// let myBulletin = document.getElementById("my_number")
-// let myNumber = 0
 
-// myBulletin.innerHTML = myNumber
-
-
-// // arrow function
-// const addNumber = () => {
-//     myNumber += 10
-//     myBulletin.innerHTML = myNumber
-// }
-
-// const minusNumber = () => {
-//     myNumber -= 10
-//     myBulletin.innerHTML = myNumber
-// }
-
-// myBtn.onclick = addNumber
-// myBtnMinus.onclick = minusNumber
-
-
-const mySend = document.getElementById("my_send")
-const myInput = document.getElementById("my_input")
 const myBox = document.getElementById("myBox")
-const myProduct = document.getElementById("myProduct")
 
-const sendMessage = () => {
-    // myInput.value
-    const newLine = document.createElement("p")
-    newLine.innerHTML = myProduct.innerHTML
-    myBox.appendChild(newLine)
-    // myInput.value = ""
+const callAPI = async () => {
+    const url = "https://map.jsdc.com.tw/sanxia/api/source/list?page=1&per_page=8"
+
+    const response = await fetch(url, {
+        method: 'get'
+    })
+
+    const responseContent = await response.json()
+
+    for (let i = 0; i < responseContent.length; i++) {
+        const newElement = document.createElement("div")
+        newElement.innerHTML = responseContent[i].name
+
+        newElement.style.backgroundColor = 'black'
+        newElement.style.color = 'white'
+        myBox.appendChild(newElement)
+        // console.log(ptag)
+    }
 }
 
-// mySend.onclick = sendMessage
-myProduct.onclick = sendMessage
+callAPI()
+
+
+
+
+
+
+
+// const myColorPicker = document.getElementById("myColorPicker")
+
+// myColorPicker.addEventListener('change', function (e) {
+//     myBox.style.backgroundColor = this.value
+// })
+
+// const myGreenBtn = document.getElementById("myGreenBtn")
+// const myBlueBtn = document.getElementById("myBlueBtn")
+// const myRedBtn = document.getElementById("myRedBtn")
+
+// const toColor = (color) => {
+//     myBox.style.backgroundColor = color
+// }
+
+// myGreenBtn.onclick = () => { toColor("#17ff5d") }
+// myBlueBtn.onclick = () => { toColor("#17ff5d") }
+// myRedBtn.onclick = () => { toColor("#17ff5d") }
+
+// myBox.style.backgroundColor = '#878787'
+
+// const myButton = document.createElement("button")
+// myButton.innerHTML = 'my button'
+// myBox.appendChild(myButton)
