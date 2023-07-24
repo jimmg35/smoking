@@ -1,28 +1,55 @@
 
 
-const myBox = document.getElementById("myBox")
 
-const callAPI = async () => {
-    const url = "https://map.jsdc.com.tw/sanxia/api/source/list?page=1&per_page=8"
+const map = L.map('myMap').setView(
+    [25.02563718675026, 121.52727768988933],
+    16
+)
 
-    const response = await fetch(url, {
-        method: 'get'
-    })
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
 
-    const responseContent = await response.json()
 
-    for (let i = 0; i < responseContent.length; i++) {
-        const newElement = document.createElement("div")
-        newElement.innerHTML = responseContent[i].name
+L.geoJSON(data).addTo(map)
 
-        newElement.style.backgroundColor = 'black'
-        newElement.style.color = 'white'
-        myBox.appendChild(newElement)
-        // console.log(ptag)
-    }
-}
 
-callAPI()
+
+var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+};
+
+fetch("https://map.jsdc.com.tw/sanxia/api/resource/geojson?uri=28222", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+
+
+// const myBox = document.getElementById("myBox")
+
+// const callAPI = async () => {
+//     const url = "https://map.jsdc.com.tw/sanxia/api/source/list?page=1&per_page=8"
+
+//     const response = await fetch(url, {
+//         method: 'get'
+//     })
+
+//     const responseContent = await response.json()
+
+//     for (let i = 0; i < responseContent.length; i++) {
+//         const newElement = document.createElement("div")
+//         newElement.innerHTML = responseContent[i].name
+
+//         newElement.style.backgroundColor = 'black'
+//         newElement.style.color = 'white'
+//         myBox.appendChild(newElement)
+//         // console.log(ptag)
+//     }
+// }
+
+// callAPI()
 
 
 

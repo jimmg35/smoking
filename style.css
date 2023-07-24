@@ -1,6 +1,10 @@
-#myBox {
-    width: 500px;
-    height: fit-content;
-    padding: 20px;
-    background-color: aquamarine;
+#myMap {
+    width: 100vw;
+    height: 100vh;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
 }
