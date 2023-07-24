@@ -12,7 +12,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 
-L.geoJSON(data).addTo(map)
+
 
 
 
@@ -22,9 +22,21 @@ var requestOptions = {
 };
 
 fetch("https://map.jsdc.com.tw/sanxia/api/resource/geojson?uri=28222", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+    .then((response) => {
+        return response.json()
+    })
+    .then((response) => {
+        const geojson = JSON.parse(response.content)
+
+        console.log(geojson)
+
+        L.geoJSON(geojson)
+            .bindPopup(function (layer) {
+                return layer.feature.properties['標題'];
+            })
+            .addTo(map)
+
+    })
 
 
 // const myBox = document.getElementById("myBox")
