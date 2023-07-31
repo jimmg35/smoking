@@ -1,94 +1,53 @@
 
-
-
+// 初始化地圖
 const map = L.map('myMap').setView(
-    [25.02563718675026, 121.52727768988933],
-    16
+  [24, 121.5],
+  16
 )
 
+// 加入OSM底圖
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
+  maxZoom: 19,
+  attribution: '© OpenStreetMap'
 }).addTo(map);
 
 
 
+let isCircleLoaded = false
+let circle;
+
+// 偵測地圖點擊事件
+map.on('click', function (e) {
+  if (!isCircleLoaded) {
+    // 加入圓圈
+    circle = L.circle(e.latlng, { radius: 3000 })
+    map.addLayer(circle)
+    isCircleLoaded = true
+  }
+})
+
+const myInput = document.getElementById("myInput")
+myInput.addEventListener('change', function (e) {
+  if (!circle) return
+  circle.setRadius(e.target.value)
+})
+
+
+// create a red polygon from an array of LatLng points
+var latlngs = [[25, 121], [25, 121.5], [24, 121.5], [24, 121]];
+
+var polygon = L.polygon(latlngs, { color: 'red' }).addTo(map);
 
 
 
-var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-};
+document.getElementById("myBtn").addEventListener('click', function () {
+  if (!circle) return
+  const geojson = circle.toGeoJSON()
+  console.log(geojson)
 
-fetch("https://map.jsdc.com.tw/sanxia/api/resource/geojson?uri=28222", requestOptions)
-    .then((response) => {
-        return response.json()
-    })
-    .then((response) => {
-        const geojson = JSON.parse(response.content)
+  // 用turf造出circle 然後丟進intersect
+  // hint
+  // turf circle, turf intersect
+  // leaflet circle method(getRadius, getLatLng)
 
-        console.log(geojson)
-
-        L.geoJSON(geojson)
-            .bindPopup(function (layer) {
-                return layer.feature.properties['標題'];
-            })
-            .addTo(map)
-
-    })
-
-
-// const myBox = document.getElementById("myBox")
-
-// const callAPI = async () => {
-//     const url = "https://map.jsdc.com.tw/sanxia/api/source/list?page=1&per_page=8"
-
-//     const response = await fetch(url, {
-//         method: 'get'
-//     })
-
-//     const responseContent = await response.json()
-
-//     for (let i = 0; i < responseContent.length; i++) {
-//         const newElement = document.createElement("div")
-//         newElement.innerHTML = responseContent[i].name
-
-//         newElement.style.backgroundColor = 'black'
-//         newElement.style.color = 'white'
-//         myBox.appendChild(newElement)
-//         // console.log(ptag)
-//     }
-// }
-
-// callAPI()
-
-
-
-
-
-
-
-// const myColorPicker = document.getElementById("myColorPicker")
-
-// myColorPicker.addEventListener('change', function (e) {
-//     myBox.style.backgroundColor = this.value
-// })
-
-// const myGreenBtn = document.getElementById("myGreenBtn")
-// const myBlueBtn = document.getElementById("myBlueBtn")
-// const myRedBtn = document.getElementById("myRedBtn")
-
-// const toColor = (color) => {
-//     myBox.style.backgroundColor = color
-// }
-
-// myGreenBtn.onclick = () => { toColor("#17ff5d") }
-// myBlueBtn.onclick = () => { toColor("#17ff5d") }
-// myRedBtn.onclick = () => { toColor("#17ff5d") }
-
-// myBox.style.backgroundColor = '#878787'
-
-// const myButton = document.createElement("button")
-// myButton.innerHTML = 'my button'
-// myBox.appendChild(myButton)
+})
